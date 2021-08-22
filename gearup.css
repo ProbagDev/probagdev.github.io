@@ -1,0 +1,250 @@
+/* Background */
+body {
+    font-family: 'Catamaran', sans-serif;
+    background: no-repeat url("./img/background-gors.jpg") fixed top center #010101;
+    background-size: cover;
+    color: #f7f7f7;
+    height: 100vh;
+}
+
+h1 {
+    font-family: 'Libre Baskerville', serif;
+}
+
+#setup {
+    height: 100%;
+    max-width: 850px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#results {
+    max-width: 1000px;
+    min-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#form {
+    width: 75%;
+}
+
+.form-control {
+    border-radius: 2px;
+}
+
+button {
+    background-color: #dee1e3;
+    color: #181818;
+    border: 1px solid black;
+    height: 35px;
+}
+button:hover {
+    background-color: #f4f7f9;
+}
+
+#link {
+    text-decoration: none;
+    color: white;
+}
+
+/* Loading */
+#loading {
+    width: 50px;
+    background-color: rgba(5, 11, 16, 0.75);
+    border: 1px solid black;
+}
+#loadingContainer {
+    height: 100%;
+}
+
+/* Errors */
+#parsingError {
+    background-color: rgba(176, 36, 34, 0.75);
+    border: 1px solid #b02422;
+    text-align: center;
+}
+#errorContainer {
+    height: 100%;
+}
+
+/* Character Menu */
+#characterMenu .flex-row {
+    width: 100%;
+}
+
+.character-card {
+    width: 150px;
+    height: 150px;
+    margin: 10px;
+    padding: 15px;
+    background-color: #dee1e3;
+    color: #181818;
+    border: 1px solid black;
+    cursor: pointer;
+    justify-content: center;
+}
+.character-card:hover {
+    background-color: #f4f7f9;
+}
+
+.character-card p {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* Wardrobe */
+.wardrobe-right {
+    margin-left: auto;
+}
+
+.wardrobe-item {
+    margin-bottom: 5px;
+    margin-left: 5px;
+    min-width: 60px;
+}
+
+.item-violation {
+    background-color: red;
+}
+.item-violation:hover{
+    cursor: pointer;
+}
+.item-violation .item-img {
+    opacity: 0.33;
+}
+
+#issues {
+    padding: 0 2rem 2rem 2rem;
+}
+
+.item-img-sml {
+    width: 30px;
+    height: 30px;
+    margin-right: 0.8rem;
+}
+
+.item-img {
+    width: 60px;
+    height: 60px;
+}
+.item-img:hover {
+    opacity: 0.5;
+}
+
+.rarity {
+    border-style: solid;
+    border-width: 3px;
+}
+
+.rarity-junk {
+    border-color: #AAA;
+    color: #AAA;
+}
+
+.rarity-basic {
+    border-color: #FFF;
+    color: #FFF;
+}
+
+.rarity-fine {
+    border-color: #62A4DA;
+    color: #62A4DA;
+}
+
+.rarity-masterwork {
+    border-color: #1a9306;
+    color: #1a9306;
+}
+
+.rarity-rare {
+    border-color: #fcd00b;
+    color: #fcd00b;
+}
+
+.rarity-exotic {
+    border-color: #ffa405;
+    color: #ffa405;
+}
+
+.rarity-ascended {
+    border-color: #fb3e8d;
+    color: #fb3e8d;
+}
+
+.rarity-legendary {
+    border-color: #5614d2;
+    color: #5614d2;
+}
+
+/* Tooltip */
+#tooltip {
+    display:block;
+    position:fixed;
+    overflow:hidden;
+    border: 1px solid black;
+    background-color: black;
+    background-image: url("https://unpkg.com/armory-embeds@%5E0.x.x/images/gw2a--2xxYoMhS.png");
+}
+#tt-name, #tt-stat, #tt-type {
+    margin: 0;
+}
+
+/* Results */
+.result {
+    border: 1px solid black;
+    background-color: black;
+    background-image: url("https://unpkg.com/armory-embeds@%5E0.x.x/images/gw2a--2xxYoMhS.png");
+}
+
+.external-btn-wrap {
+    margin-bottom: 5px;
+}
+
+.external-btn-clickable {
+    border: 1px solid black;
+    background-color: black;
+    background-image: url("./img/background-blk.jpg");
+    min-height: 44px;
+    text-align: center;
+    padding: 5px;
+    width: 100%;
+}
+.external-btn-clickable:hover {
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.external-btn {
+    border: 2px solid #646464;
+    color: inherit;
+    padding: 10px;
+    text-decoration: inherit;
+    width: 100%;
+    display: inline-block;
+}
+.external-btn:hover {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+/* Utility */
+.hidden {
+    display: none !important;
+}
+
+.green {
+    color: green !important;
+}
+.red {
+    color: #a40000 !important;
+}
+
+.no-bullets {
+    list-style-type: none;
+}
+
+/* Range */
+.titled {
+    text-transform:capitalize;
+}

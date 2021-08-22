@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="no-cache">
+    <title>G.A.B.O. | Gear and Build Organizer</title>
+    <script src="jquery-3.0.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="gearup.css">
+    <script src="https://kit.fontawesome.com/9cf27af359.js" crossorigin="anonymous"></script>
+
+    <!-- Extensions and Services -->
+    <script src="extensions.js"></script>
+    <script src="helpers.js"></script>
+    <script src="classes/services/Utility.js"></script>
+    <script src="classes/services/GW2ApiService.js"></script>
+    <script src="classes/services/GearOrganizer.js"></script>
+
+    <!-- Gear Scripts -->
+    <script src="classes/gear/GABOItem.js"></script>
+    <script>
+        $(document).ready(() => {
+            fillAPIKey();
+        });
+    </script>
+</head>
+<body>
+<div id="setup" class="d-flex flex-column justify-content-center align-items-center pt-5">
+    <div id="form" class="pb-5">
+        <h1 class="text-center pb-2">Gear and Build Organizer</h1>
+        <input id="apiKey" class="form-control mb-1" type="text" placeholder="API Key" aria-label="default input example">
+        <div class="d-grid gap-2 mt-2">
+            <button id="checkGear" type="button" onclick="checkGear()">Check Gear</button>
+        </div>
+    </div>
+</div>
+<div id="errorContainer" class="d-flex flex-column justify-content-center align-items-center pt-5 hidden">
+    <div id="parsingError" class="p-2">
+        <p class="m-0"><b>Parsing Error:</b> Could be caused by a bad link, difficult to parse build, or non-standard build</p>
+        <button type="button" onclick="back();">Back</button>
+    </div>
+</div>
+<div id="loadingContainer" class="d-flex flex-column justify-content-center align-items-center pt-5 hidden">
+    <div id="loading" class="d-flex justify-content-center p-2">
+        <div class="spinner-border" role="status">
+        </div>
+    </div>
+</div>
+<div id="characterMenu" class="d-flex flex-column justify-content-center align-items-center pt-5 hidden">
+    <h1 class="text-center pb-2">Select a character</h1>
+    <div id="characterSelections" class="d-flex flex-row justify-content-center p-5 flex-wrap">
+    </div>
+</div>
+<div id="title" class="d-flex flex-column justify-content-center align-items-center pt-5 hidden">
+    <h1 id="character-name" class="text-center pb-2"></h1>
+    <h4><img id="profession-image" class="img-fluid" src="https://via.placeholder.com/20">&nbsp;<span id="profession"></span></h4>
+    <p>Checking against <a id="link" href="#"></a></p>
+</div>
+<div id="results" class="pt-5" style="display:none;">
+    <button type="button" onclick="back()">Back</button>
+    <div class="d-flex flex-row justify-content-between p-5">
+        <div class="d-flex flex-column">
+            <div id="HelmContent" class="wardrobe-item rarity rarity-junk">
+                <img id="Helm" alt="Helm" class="item-img img-fluid" src="https://via.placeholder.com/88"/>
+            </div>
+            <div id="ShouldersContent" class="wardrobe-item rarity rarity-junk">
+                <img id="Shoulders" alt="Shoulders" class="item-img img-fluid" src="https://via.placeholder.com/88"/>
+            </div>
+            <div id="CoatContent" class="wardrobe-item rarity rarity-junk">
+                <img id="Coat" alt="Coat" class="item-img img-fluid" src="https://via.placeholder.com/88"/>
+            </div>
+            <div id="GlovesContent" class="wardrobe-item rarity rarity-junk">
+                <img id="Gloves" alt="Gloves" class="item-img img-fluid" src="https://via.placeholder.com/88"/>
+            </div>
+            <div id="LeggingsContent" class="wardrobe-item rarity rarity-junk">
+                <img id="Leggings" alt="Leggings" class="item-img img-fluid" src="https://via.placeholder.com/88"/>
+            </div>
+            <div id="BootsContent" class="wardrobe-item rarity rarity-junk">
+                <img id="Boots" alt="Boots" class="item-img img-fluid" src="https://via.placeholder.com/88"/>
+            </div>
+        </div>
+        <div id="issues" class="d-flex flex-column">
+            <div id="toot" class="result p-2">
+                Click on a piece of equipment to find a replacement
+            </div>
+        </div>
+        <div class="d-flex flex-column">
+            <div class="d-flex flex-row wardrobe-right">
+                <div id="WeaponA1Content" class="wardrobe-item rarity rarity-junk">
+                    <img id="WeaponA1" alt="WeaponA1" class="item-img img-fluid" src="https://via.placeholder.com/88"/>
+                </div>
+                <div id="WeaponA2Content" class="wardrobe-item rarity rarity-junk">
+                    <img id="WeaponA2" alt="WeaponA2" class="item-img img-fluid" src="https://via.placeholder.com/88"/>
+                </div>
+            </div>
+            <div id="swap" class="d-flex flex-row">
+                <div class="mx-auto"><img class="img-fluid" src="https://wiki.guildwars2.com/images/archive/c/ce/20140606174035%21Weapon_Swap_Button.png"/></div>
+            </div>
+            <div class="d-flex flex-row wardrobe-right">
+                <div id="WeaponB1Content" class="wardrobe-item rarity rarity-junk">
+                    <img id="WeaponB1" alt="WeaponB1" class="item-img img-fluid" src="https://via.placeholder.com/88"/>
+                </div>
+                <div id="WeaponB2Content" class="wardrobe-item rarity rarity-junk">
+                    <img id="WeaponB2" alt="WeaponB2" class="item-img img-fluid" src="https://via.placeholder.com/88"/>
+                </div>
+            </div>
+            <div class="d-flex flex-row wardrobe-right">
+                <div id="BackpackContent" class="wardrobe-item rarity rarity-junk">
+                    <img id="Backpack" alt="Backpack" class="item-img img-fluid" src="https://via.placeholder.com/88"/>
+                </div>
+                <div id="Accessory1Content" class="wardrobe-item rarity rarity-junk">
+                    <img id="Accessory1" alt="Accessory1" class="item-img img-fluid" src="https://via.placeholder.com/88"/>
+                </div>
+                <div id="Accessory2Content" class="wardrobe-item rarity rarity-junk">
+                    <img id="Accessory2" alt="Accessory2" class="item-img img-fluid" src="https://via.placeholder.com/88"/>
+                </div>
+            </div>
+            <div class="d-flex flex-row wardrobe-right">
+                <div id="AmuletContent" class="wardrobe-item rarity rarity-junk">
+                    <img id="Amulet" alt="Amulet" class="item-img img-fluid" src="https://via.placeholder.com/88"/>
+                </div>
+                <div id="Ring1Content" class="wardrobe-item rarity rarity-junk">
+                    <img id="Ring1" alt="Ring1" class="item-img img-fluid" src="https://via.placeholder.com/88"/>
+                </div>
+                <div id="Ring2Content" class="wardrobe-item rarity rarity-junk">
+                    <img id="Ring2" alt="Ring2" class="item-img img-fluid" src="https://via.placeholder.com/88"/>
+                </div>
+            </div>
+            <div class="d-flex flex-row wardrobe-right">
+                <div id="HelmAquaticContent" class="wardrobe-item rarity rarity-junk">
+                    <img id="HelmAquatic" alt="HelmAquatic" class="item-img img-fluid" src="https://via.placeholder.com/88"/>
+                </div>
+                <div id="WeaponAquaticAContent" class="wardrobe-item rarity rarity-junk">
+                    <img id="WeaponAquaticA" alt="WeaponAquaticA" class="item-img img-fluid" src="https://via.placeholder.com/88"/>
+                </div>
+                <div id="swapAquatic">
+                    <div class="mx-auto"><img class="img-fluid" src="https://wiki.guildwars2.com/images/archive/c/ce/20140606174035%21Weapon_Swap_Button.png"/></div>
+                </div>
+                <div id="WeaponAquaticBContent" class="wardrobe-item rarity rarity-junk">
+                    <img id="WeaponAquaticB" alt="WeaponAquaticB" class="item-img img-fluid" src="https://via.placeholder.com/88"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
