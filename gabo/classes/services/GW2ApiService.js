@@ -25,6 +25,9 @@ let STAT_IDS = {};
 //Legendary Armor information
 let LEGENDARY_ARMORY = [];
 
+//Equipment Armory
+let EQUIPMENT_ARMORY = {};
+
 let ITEM_TYPES_OF_INTEREST = {
     "Weapon": true,
     "Back": true,
@@ -128,6 +131,71 @@ class GW2ApiService {
 
     };
 
+    fetchEquipmentArmories() {
+
+        let equipmentArmories = [];
+
+        ALL_CHARACTER_DATA.forEach((character) => {
+
+            equipmentArmories.push(this.fetchEquipmentArmory(character.name));
+
+        });
+
+        return new Promise((resolve, reject) => {
+
+            $.when(...equipmentArmories).done(() => {
+
+                resolve();
+
+            });
+
+        });
+
+    }
+
+    fetchEquipmentArmory(character) {
+
+        return new Promise((resolve, reject) => {
+
+            $.ajax({
+                url: API_LINK + `characters/${character}/equipmenttabs?tabs=all&access_token=${this.API_KEY}`,
+                success: function (response) {
+
+                    let armory = [];
+
+                    response.forEach((tab) => {
+
+                        if (tab.equipment === undefined) {
+                            return;
+                        }
+
+                        tab.equipment.forEach((stashed) => {
+
+                            //We only care about Armory
+                            if (stashed.location === "Equipped") {
+                                return;
+                            }
+
+                            if (stashed.location === "Armory") {
+                                stashed.tab = tab.tab;
+                                stashed.tabName = tab.name;
+                                armory.push(stashed);
+                            }
+
+                        })
+
+                    });
+
+                    EQUIPMENT_ARMORY[character] = armory;
+                    resolve();
+
+                }
+            });
+        });
+
+
+    }
+
     fetchLegendaryArmory() {
         return new Promise((resolve, reject) => {
             $.ajax({
@@ -213,12 +281,16 @@ class GW2ApiService {
 
             $.when(service.fetchCharacters(), service.fetchBank(), GW2ApiService.fetchStatIDs(), service.fetchLegendaryArmory()).done(function(characters, bank, statIDs) {
 
-                //Setup items
-                let uniqueItems = GW2ApiService.buildUniqueItemLookup();
-                let uniqueSkins = GW2ApiService.buildUniqueSkinLookup();
+                service.fetchEquipmentArmories().then(() => {
 
-                $.when(...GW2ApiService.fetchItems(Object.keys(uniqueItems)), ...GW2ApiService.fetchSkins(Object.keys(uniqueSkins)), GW2ApiService.fetchStats()).done(function() {
-                    resolve();
+                    //Setup items
+                    let uniqueItems = GW2ApiService.buildUniqueItemLookup();
+                    let uniqueSkins = GW2ApiService.buildUniqueSkinLookup();
+
+                    $.when(...GW2ApiService.fetchItems(Object.keys(uniqueItems)), ...GW2ApiService.fetchSkins(Object.keys(uniqueSkins)), GW2ApiService.fetchStats()).done(function() {
+                        resolve();
+                    });
+
                 });
 
             });
@@ -239,6 +311,9 @@ class GW2ApiService {
 
             //Items in all inventories
             items = GW2ApiService.addUniqueCharacterInventory(character, items);
+
+            //Items in all armories
+            items = GW2ApiService.addUniqueCharacterArmory(character.name, items);
 
         });
 
@@ -262,6 +337,9 @@ class GW2ApiService {
 
             //Items in all inventories
             skins = GW2ApiService.addUniqueCharacterInventorySkins(character, skins);
+
+            //Items in all armories
+            skins = GW2ApiService.addUniqueCharacterArmorySkins(character.name, skins);
 
         });
 
@@ -289,6 +367,39 @@ class GW2ApiService {
 
         return items;
 
+    }
+
+    static addUniqueCharacterArmory(character, items) {
+
+        EQUIPMENT_ARMORY[character].forEach(function(stashed){
+
+            if (!stashed) {
+                return;
+            }
+
+            items[stashed.id] = true;
+
+        });
+
+        return items;
+
+    }
+
+    static addUniqueCharacterArmorySkins(character, skins) {
+
+        EQUIPMENT_ARMORY[character].forEach(function(stashed){
+
+            if (!stashed) {
+                return;
+            }
+
+            if (stashed.skin !== undefined) {
+                skins[stashed.skin] = true;
+            }
+
+        });
+
+        return skins;
     }
 
     static addUniqueCharacterInventory(character, items) {

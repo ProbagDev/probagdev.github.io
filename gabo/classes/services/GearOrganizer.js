@@ -97,6 +97,28 @@ class GearOrganizer {
             GEAR_LOOKUP.bucket(GEAR_LOOKUP, [item.gaboItem.type, item.gaboItem.subType, item.gaboItem.rarity, item.gaboItem.statName], item.gaboItem);
         });
 
+        Object.keys(EQUIPMENT_ARMORY).forEach((character) => {
+
+            EQUIPMENT_ARMORY[character].forEach((stashed) => {
+
+                if (!stashed) {
+                    return;
+                }
+
+                if (ITEM_DATA[stashed.id] === undefined) {
+                    return;
+                }
+
+                let item = ITEM_DATA[stashed.id];
+
+                item.gaboItem = new GABOItem(stashed, item, `${character} has %%ITEM%% stored in Equipment tab ${stashed.tab} named ${stashed.tabName}`);
+
+                GEAR_LOOKUP.bucket(GEAR_LOOKUP, [item.gaboItem.type, item.gaboItem.subType, item.gaboItem.rarity, item.gaboItem.statName], item.gaboItem);
+
+            });
+
+        })
+
         LEGENDARY_ARMORY.forEach((stashed) => {
 
             if (stashed["count"] === 0) {
@@ -138,7 +160,7 @@ class GearOrganizer {
 
         unselected.forEach((piece) => {
 
-            if (GearOrganizer.itemCanBeStat(piece, item.statID)) {
+            if (GearOrganizer.itemIsCorrectWeight(piece) && GearOrganizer.itemCanBeStat(piece, item.statID)) {
                 equivalents.push(piece);
             }
 

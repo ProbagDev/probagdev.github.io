@@ -136,6 +136,7 @@ function showEquipment(name) {
 function fillSlot(slot) {
 
     if (!CURRENT_GEAR[slot]) {
+        $(`#${slot}Content`).attr('onclick', `showFilters('${slot}')`);
         return;
     }
 
@@ -250,9 +251,18 @@ function getWeaponDropdown() {
  */
 function showResults(slot) {
 
+    //TODO: If no instance exists, we should have a default GABOItem that can be used in the same way (i.e. takes on all the prerequisits to function)
     let instance = CURRENT_GEAR[slot];
-    let item = ITEM_DATA[instance.id];
-    let gaboItem = new GABOItem(instance, item, '');
+
+    let gaboItem = null;
+
+    if (instance === undefined) {
+        gaboItem = new GABOItem(null, null, '');
+        gaboItem.setType(slot);
+    } else {
+        let item = ITEM_DATA[instance.id];
+        gaboItem = new GABOItem(instance, item, '');
+    }
 
     let existing = `<p><strong>You are already wearing a matching item</strong></p>`;
 
@@ -362,7 +372,7 @@ function humanReadableSlot(slot) {
 function getWeaponTypeFromSlot(slotName) {
     let id = CURRENT_GEAR.access([slotName, 'id'], "");
 
-    return ITEM_DATA.access([id, 'details', 'type'], "");
+    return ITEM_DATA.access([id, 'details', 'type'], "Weapon");
 
 }
 

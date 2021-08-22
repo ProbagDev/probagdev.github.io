@@ -3,6 +3,7 @@ let SLOTS = [
     "Helm", "Shoulders", "Coat", "Gloves", "Leggings", "Boots", "WeaponA1", "WeaponA2", "WeaponB1", "WeaponB2",
     "Backpack", "Accessory1", "Accessory2", "Amulet", "Ring1", "Ring2", "HelmAquatic", "WeaponAquaticA", "WeaponAquaticB"
 ];
+
 let WEAPON_TYPES = [
     'Axe', 'Dagger', 'Mace', 'Pistol', 'Sword',
     'Scepter',

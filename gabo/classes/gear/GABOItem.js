@@ -4,19 +4,23 @@ class GABOItem {
 
     constructor(instance, itemData, location) {
 
-        this.name = itemData.name;
-        this.statName = this.getItemStatName(instance, itemData);
-        this.statID = this.getItemStatID(instance, itemData);
-        this.hands = this.getItemHandedness(itemData);
-        this.type = this.getItemType(itemData);
-        this.subType = this.getItemSubType(itemData);
-        this.rarity = this.getItemRarity(itemData);
-        this.weight = itemData.access(['details', 'weight_class'], '');
-        this.selectableStats = this.getSelectableStats(instance, itemData);
-        this.skin = instance.access(['skin'], '');
-        this.skinLink = this.skin !== '' ? SKIN_DATA.access([this.skin, 'icon'], '') : '';
-        this.icon = itemData.access(['icon'], '');
-        this.location = location.replace("%%ITEM%%", `<span class="rarity-${this.rarity.toLowerCase()}">${this.name}</span>`);
+        if (instance !== null && itemData !== null) {
+            this.name = itemData.name;
+            this.statName = this.getItemStatName(instance, itemData);
+            this.statID = this.getItemStatID(instance, itemData);
+            this.hands = this.getItemHandedness(itemData);
+            this.type = this.getItemType(itemData);
+            this.subType = this.getItemSubType(itemData);
+            this.rarity = this.getItemRarity(itemData);
+            this.weight = itemData.access(['details', 'weight_class'], '');
+            this.selectableStats = this.getSelectableStats(instance, itemData);
+            this.skin = instance.access(['skin'], '');
+            this.skinLink = this.skin !== '' ? SKIN_DATA.access([this.skin, 'icon'], '') : '';
+            this.icon = itemData.access(['icon'], '');
+            this.location = location.replace("%%ITEM%%", `<span class="rarity-${this.rarity.toLowerCase()}">${this.name}</span>`);
+        }
+
+
 
     }
 
@@ -71,6 +75,38 @@ class GABOItem {
 
     getItemType(itemData) {
         return itemData.type;
+    }
+
+    setType(slot) {
+
+        let types = {
+            "Weapon": "Weapon",
+            "Helm": "Armor",
+            "Shoulders": "Armor",
+            "Coat": "Armor",
+            "Gloves": "Armor",
+            "Leggings": "Armor",
+            "Boots": "Armor",
+            "Ring": "Trinket",
+            "Back": "Back",
+            "Accessory": "Trinket",
+            "Amulet": "Trinket"
+        };
+
+        this.type = "";
+
+        Object.keys(types).forEach((type) => {
+
+            if (slot.indexOf(type) > -1) {
+                this.type = types[type];
+
+                if (type !== "Weapon") {
+                    this.subType = type === "Back" ? undefined : type;
+                }
+            }
+
+        });
+
     }
 
     getItemSubType(itemData) {
