@@ -47,6 +47,11 @@ class GW2ApiService {
 
     }
 
+    static displayUnauthorized() {
+        clearLoading();
+        $("#errorContainer").removeClass('hidden');
+    }
+
     //Get character data from GW2 Api
     fetchCharacters() {
 
@@ -58,6 +63,11 @@ class GW2ApiService {
                     ALL_CHARACTER_DATA = response;
 
                     resolve();
+                },
+                error: function (xhr) {
+                    if(xhr.status == 403) {
+                        GW2ApiService.displayUnauthorized();
+                    }
                 }
             });
 
@@ -189,6 +199,11 @@ class GW2ApiService {
                     EQUIPMENT_ARMORY[character] = armory;
                     resolve();
 
+                },
+                error: function (xhr) {
+                    if(xhr.status == 403) {
+                        GW2ApiService.displayUnauthorized();
+                    }
                 }
             });
         });

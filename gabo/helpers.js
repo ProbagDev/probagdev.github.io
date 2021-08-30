@@ -123,6 +123,10 @@ function showEquipment(name) {
 
     });
 
+    //Replace character header
+    $("#characterName").text(name);
+    $("#professionImage").attr("src", PROFESSION_ICONS[CURRENT_CHARACTER.profession]);
+    $("#profession").text(CURRENT_CHARACTER.profession);
     $("#results").show();
 
     $("#characterMenu").addClass('hidden');
@@ -188,6 +192,8 @@ function showFilters(slot) {
     $('#stats').on('input', () => {
         SELECTED_STAT = $('#stats').val();
         $("#statName").text(SELECTED_STAT);
+        $("#searchBtn").attr("disabled", !$("#stats").val());
+
     });
 
     //Search button
@@ -201,7 +207,7 @@ function showFilters(slot) {
  * @returns {string}
  */
 function getSearchButton(slot) {
-    return `<div class="text-center"><button onclick="showResults('${slot}')" type="button" class="mt-2">Search</button><div>`;
+    return `<div class="text-center"><button id="searchBtn" onclick="showResults('${slot}')" type="button" class="mt-2" disabled>Search</button><div>`;
 }
 
 /**

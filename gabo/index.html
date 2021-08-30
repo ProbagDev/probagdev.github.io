@@ -14,14 +14,14 @@
     <script src="https://kit.fontawesome.com/9cf27af359.js" crossorigin="anonymous"></script>
 
     <!-- Extensions and Services -->
-    <script src="extensions.js"></script>
-    <script src="helpers.js"></script>
-    <script src="classes/services/Utility.js"></script>
-    <script src="classes/services/GW2ApiService.js"></script>
-    <script src="classes/services/GearOrganizer.js"></script>
+    <script src="extensions.js?v=1"></script>
+    <script src="helpers.js?v=1"></script>
+    <script src="classes/services/Utility.js?v=1"></script>
+    <script src="classes/services/GW2ApiService.js?v=1"></script>
+    <script src="classes/services/GearOrganizer.js?v=1"></script>
 
     <!-- Gear Scripts -->
-    <script src="classes/gear/GABOItem.js"></script>
+    <script src="classes/gear/GABOItem.js?v=1"></script>
     <script>
         $(document).ready(() => {
             fillAPIKey();
@@ -36,11 +36,22 @@
         <div class="d-grid gap-2 mt-2">
             <button id="checkGear" type="button" onclick="checkGear()">Check Gear</button>
         </div>
+        <i>The API key should have all account permissions</i>
+    </div>
+    <div id="changeLog" class="p-2">
+        <h2>Changelog</h2>
+        <h5>August 29th, 2021</h5>
+        <ul>
+            <li>A header now shows with character name and profession when viewing results</li>
+            <li>An error appears when trying to use an api key that is not authorized to access all endpoints required</li>
+            <li>Stat name is now required before search can be executed</li>
+            <li>Added this changelog</li>
+        </ul>
     </div>
 </div>
 <div id="errorContainer" class="d-flex flex-column justify-content-center align-items-center pt-5 hidden">
-    <div id="parsingError" class="p-2">
-        <p class="m-0"><b>Parsing Error:</b> Could be caused by a bad link, difficult to parse build, or non-standard build</p>
+    <div id="permissionsError" class="p-2">
+        <p class="m-0"><b>Permissions Error:</b> That api key is not authorized to access endpoints required by this tool</p>
         <button type="button" onclick="back();">Back</button>
     </div>
 </div>
@@ -55,13 +66,14 @@
     <div id="characterSelections" class="d-flex flex-row justify-content-center p-5 flex-wrap">
     </div>
 </div>
-<div id="title" class="d-flex flex-column justify-content-center align-items-center pt-5 hidden">
-    <h1 id="character-name" class="text-center pb-2"></h1>
-    <h4><img id="profession-image" class="img-fluid" src="https://via.placeholder.com/20">&nbsp;<span id="profession"></span></h4>
-    <p>Checking against <a id="link" href="#"></a></p>
-</div>
 <div id="results" class="pt-5" style="display:none;">
+
     <button type="button" onclick="back()">Back</button>
+    <h1 id="characterName" class="text-center pb-2"></h1>
+    <div class="d-flex flex-row justify-content-center align-items-center">
+        <h4><img id="professionImage" class="img-fluid" src="https://via.placeholder.com/20">&nbsp;<span id="profession"></span></h4>
+    </div>
+
     <div class="d-flex flex-row justify-content-between p-5">
         <div class="d-flex flex-column">
             <div id="HelmContent" class="wardrobe-item rarity rarity-junk">

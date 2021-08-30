@@ -29,6 +29,14 @@ h1 {
     width: 75%;
 }
 
+#searchBtn:disabled {
+    cursor: not-allowed;
+    color: darkgray;
+}
+#searchBtn:disabled:hover {
+    background-color: #dee1e3;
+}
+
 .form-control {
     border-radius: 2px;
 }
@@ -188,6 +196,12 @@ button:hover {
 }
 #tt-name, #tt-stat, #tt-type {
     margin: 0;
+}
+
+/* Change log */
+#changeLog {
+    border: 1px solid black;
+    background-color: rgba(5, 11, 16, 0.75);
 }
 
 /* Results */
